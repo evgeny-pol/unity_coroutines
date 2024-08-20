@@ -22,7 +22,6 @@ public class Counter : MonoBehaviour
             if (_counterCoroutine == null)
             {
                 _counterCoroutine = StartCoroutine(CounterCoroutine());
-                return;
             }
             else
             {
