@@ -1,19 +1,18 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class Counter : MonoBehaviour
 {
+    public event UnityAction<int> CounterChanged;
+
     [SerializeField, Min(0)] private float _incrementInterval;
     [SerializeField, Min(1)] private int _incrementValue;
-    [SerializeField] private Text _counterText;
 
+    private int _value;
     private Coroutine _counterCoroutine;
 
-    private void Start()
-    {
-        _counterText.text = "0";
-    }
+    public int Value => _value;
 
     private void Update()
     {
@@ -21,7 +20,7 @@ public class Counter : MonoBehaviour
         {
             if (_counterCoroutine == null)
             {
-                _counterCoroutine = StartCoroutine(CounterCoroutine());
+                _counterCoroutine = StartCoroutine(DoCounting());
             }
             else
             {
@@ -31,14 +30,14 @@ public class Counter : MonoBehaviour
         }
     }
 
-    private IEnumerator CounterCoroutine()
+    private IEnumerator DoCounting()
     {
         var incrementInterval = new WaitForSeconds(_incrementInterval);
 
         while (true)
         {
-            int.TryParse(_counterText.text, out int currentValue);
-            _counterText.text = (currentValue + _incrementValue).ToString();
+            _value += _incrementValue;
+            CounterChanged?.Invoke(_value);
             yield return incrementInterval;
         }
     }
