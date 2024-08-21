@@ -6,16 +6,6 @@ public class CounterView : MonoBehaviour
     [SerializeField] private Counter _counter;
     [SerializeField] private Text _text;
 
-    public void OnCounterChanged(int value)
-    {
-        _text.text = value.ToString();
-    }
-
-    private void Start()
-    {
-        _text.text = _counter.Value.ToString();
-    }
-
     private void OnEnable()
     {
         _counter.CounterChanged += OnCounterChanged;
@@ -24,5 +14,15 @@ public class CounterView : MonoBehaviour
     private void OnDisable()
     {
         _counter.CounterChanged -= OnCounterChanged;
+    }
+
+    private void Start()
+    {
+        _text.text = _counter.Value.ToString();
+    }
+
+    public void OnCounterChanged(int value)
+    {
+        _text.text = value.ToString();
     }
 }

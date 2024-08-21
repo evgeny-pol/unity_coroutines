@@ -4,13 +4,13 @@ using UnityEngine.Events;
 
 public class Counter : MonoBehaviour
 {
-    public event UnityAction<int> CounterChanged;
-
     [SerializeField, Min(0)] private float _incrementInterval;
     [SerializeField, Min(1)] private int _incrementValue;
 
     private int _value;
     private Coroutine _counterCoroutine;
+
+    public event UnityAction<int> CounterChanged;
 
     public int Value => _value;
 
@@ -20,7 +20,7 @@ public class Counter : MonoBehaviour
         {
             if (_counterCoroutine == null)
             {
-                _counterCoroutine = StartCoroutine(DoCounting());
+                _counterCoroutine = StartCoroutine(Run());
             }
             else
             {
@@ -30,11 +30,11 @@ public class Counter : MonoBehaviour
         }
     }
 
-    private IEnumerator DoCounting()
+    private IEnumerator Run()
     {
         var incrementInterval = new WaitForSeconds(_incrementInterval);
 
-        while (true)
+        while (enabled)
         {
             _value += _incrementValue;
             CounterChanged?.Invoke(_value);
